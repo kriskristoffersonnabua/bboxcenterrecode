@@ -1,20 +1,79 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 
 const Header = props => {
+	const redirecTo = evt => {
+		const {
+			preventDefault,
+			currentTarget: {
+				dataset: { link }
+			}
+		} = evt
+		props.history.push(`/dashboard/${link}`)
+	}
+
 	return (
-		<nav class="navbar box is-paddingless ">
-			<div class="navbar-brand is-centered image is-128x64">
-				<img class="navbar-item" src={require('../../assets/logo_full.png')} />
+		<nav className="navbar box is-paddingless ">
+			<div className="navbar-brand is-centered image is-128x64">
+				<img
+					className="navbar-item"
+					src={require('../../assets/logo_full.png')}
+				/>
 			</div>
-			<div class="navbar-end">
-				<a class="navbar-item">Time Log</a>
-				<a class="navbar-item">Employees</a>
-				<a class="navbar-item">Reviewers</a>
-				<a class="navbar-item">Inventory</a>
-				<a class="navbar-item">Payments</a>
+			<div className="navbar-end">
+				<a
+					onClick={redirecTo}
+					data-link="timelog"
+					className={`has-text-weight-bold navbar-item ${
+						props.location.pathname.includes('timelog')
+							? 'has-text-success'
+							: ''
+					}`}>
+					Time Log
+				</a>
+				<a
+					onClick={redirecTo}
+					data-link="employees"
+					className={`has-text-weight-bold navbar-item ${
+						props.location.pathname.includes('employees')
+							? 'has-text-success'
+							: ''
+					}`}>
+					Employees
+				</a>
+				<a
+					onClick={redirecTo}
+					data-link="reviewers"
+					className={`has-text-weight-bold navbar-item ${
+						props.location.pathname.includes('reviewers')
+							? 'has-text-success'
+							: ''
+					}`}>
+					Reviewers
+				</a>
+				<a
+					onClick={redirecTo}
+					data-link="inventory"
+					className={`has-text-weight-bold navbar-item ${
+						props.location.pathname.includes('inventory')
+							? 'has-text-success'
+							: ''
+					}`}>
+					Inventory
+				</a>
+				<a
+					onClick={redirecTo}
+					data-link="payments"
+					className={`has-text-weight-bold navbar-item ${
+						props.location.pathname.includes('payments')
+							? 'has-text-success'
+							: ''
+					}`}>
+					Payments
+				</a>
 			</div>
 		</nav>
 	)
 }
 
-export default Header
+export default withRouter(Header)

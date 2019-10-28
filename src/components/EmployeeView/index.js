@@ -9,23 +9,24 @@ const Schedule = props => {
 			style={{ marginRight: 2, marginBottom: 2 }}>
 			{`${WEEKDAYS[weekday]} ${
 				new Date(timestart).toTimeString().split(' ')[0]
-			}-${new Date(timeend).toTimeString().split(' ')[0]}`}
-			<span className="delete" style={{ marginLeft: 5 }}></span>
+			} ${new Date(timeend).toTimeString().split(' ')[0]}`}
 		</span>
 	)
 }
 
-const EmployeeAddForm = props => {
+const EmployeeView = props => {
 	return (
 		<div className="container" style={{ paddingBottom: 20 }}>
 			<div className="nav-bar">
 				<div className="nav-bar-left is-flex" style={{ marginBottom: 10 }}>
 					<button
-						className="button level-left is-success"
+						className="button level-left is-success is-small"
 						style={{ marginRight: 10 }}>
-						Add Employee
+						Edit Employee
 					</button>
-					<button className="button level-right is-danger">Cancel</button>
+					<button className="button level-right is-danger is-small">
+						Cancel
+					</button>
 				</div>
 			</div>
 			<div className="columns">
@@ -100,19 +101,21 @@ const EmployeeAddForm = props => {
 				<div className="column is-one-quarter">
 					<div className="box">
 						<label className="label is-size-5">Available Schedule</label>
-						<label className="label">Date</label>
-						<input className="input" placeholder="Contact" type="date" />
-						<label className="label">Time Start</label>
-						<input className="input" placeholder="Contact" type="time" />
-						<label className="label">Time End</label>
-						<input
-							className="input"
-							placeholder="Contact"
-							type="time"
-							style={{ marginBottom: 20 }}
-						/>
-						<div className="container is-flex" style={{ marginBottom: 10 }}>
-							<button className="button is-success">Add</button>
+						<div className="container">
+							<label className="label">Date</label>
+							<input className="input" placeholder="Contact" type="date" />
+							<label className="label">Time Start</label>
+							<input className="input" placeholder="Contact" type="time" />
+							<label className="label">Time End</label>
+							<input
+								className="input"
+								placeholder="Contact"
+								type="time"
+								style={{ marginBottom: 20 }}
+							/>
+							<div className="container is-flex" style={{ marginBottom: 10 }}>
+								<button className="button is-success">Add</button>
+							</div>
 						</div>
 						<div className="container" style={{ overflowY: 'scroll' }}>
 							<Schedule
@@ -179,4 +182,4 @@ const EmployeeAddForm = props => {
 	)
 }
 
-export default EmployeeAddForm
+export default EmployeeView
