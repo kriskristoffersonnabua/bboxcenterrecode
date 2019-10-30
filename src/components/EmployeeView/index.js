@@ -45,7 +45,6 @@ const EmployeeView = props => {
 	}
 
 	useEffect(() => {
-		console.log('mounting')
 		fetchEmployee()
 	}, [])
 
