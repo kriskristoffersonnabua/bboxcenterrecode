@@ -26,7 +26,7 @@ export const readDocument = async (collection, docKey) => {
 		.then(function(doc) {
 			if (doc.exists) {
 				return { ...doc.data(), key: doc.id }
-			} else throw new Error()
+			}
 		})
 }
 

@@ -17,8 +17,12 @@ function Provider(props) {
 		fetchEmployees()
 	}, [])
 
+	const fns = {
+		fetchEmployees
+	}
+
 	return (
-		<EmployeeDashboardContext.Provider value={{ employees }}>
+		<EmployeeDashboardContext.Provider value={{ employees, ...fns }}>
 			{props.children}
 		</EmployeeDashboardContext.Provider>
 	)

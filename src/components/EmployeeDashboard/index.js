@@ -1,7 +1,10 @@
 import React, { useContext, useState } from 'react'
 import Table from '../reusables/Table'
 import EmployeeDashboardContext from '../../controllers/contexts/EmployeeDashboardContext'
+import EmployeeView from '../EmployeeView'
+import EmployeeAddForm from '../EmployeeAddForm'
 import { withRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 function EmployeeDashboard(props) {
 	const { history } = props
@@ -22,6 +25,12 @@ function EmployeeDashboard(props) {
 			})
 	}
 
+	const openEmployeeForm = () => {
+		history.push(`/dashboard/employees/add`, {
+			modal: true
+		})
+	}
+
 	const tableCallback = index => setSelectedIndex(index)
 
 	return (
@@ -33,15 +42,41 @@ function EmployeeDashboard(props) {
 					justifyContent: 'flex-start',
 					alignItems: 'center',
 					padding: 10,
-					paddingLeft: 75,
-					paddingRight: 75,
-					marginBottom: 10
+					paddingLeft: 20,
+					paddingRight: 20,
+					paddingBottom: 0,
+					position: 'relative',
+					top: -25
 				}}>
-				<button onClick={openEmployeeInformation} className="button is-primary">
+				{selectedIndex >= 0 && (
+					<button
+						style={{ marginRight: 10 }}
+						onClick={openEmployeeInformation}
+						className="button is-primary is-small">
+						<span className="icon" style={{ marginRight: 10 }}>
+							<i className="fas fa-users"></i>
+						</span>
+						View Employee
+					</button>
+				)}
+				<button
+					style={{ marginRight: 10 }}
+					onClick={openEmployeeForm}
+					className="button is-success is-small">
 					<span className="icon" style={{ marginRight: 10 }}>
-						<i className="fas fa-users"></i>
+						<i className="fas fa-user-plus"></i>
 					</span>
-					View Employee
+					Add Employee
+				</button>
+				<button
+					disabled
+					style={{ marginRight: 10 }}
+					onClick={openEmployeeForm}
+					className="button is-danger is-small">
+					<span className="icon" style={{ marginRight: 10 }}>
+						<i className="fas fa-trash"></i>
+					</span>
+					Delete
 				</button>
 			</div>
 			<Table
@@ -54,6 +89,18 @@ function EmployeeDashboard(props) {
 				indexSelectCallback={tableCallback}
 				data={employeeslist}
 			/>
+			<Switch>
+				<Route
+					exact
+					path={`/dashboard/employees/add`}
+					component={EmployeeAddForm}
+				/>
+				<Route
+					exact
+					path={`/dashboard/employees/:userprofileKey`}
+					component={EmployeeView}
+				/>
+			</Switch>
 		</div>
 	)
 }

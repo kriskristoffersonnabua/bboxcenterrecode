@@ -15,12 +15,22 @@ const Table = props => {
 	}
 
 	return (
-		<div className="container" style={{ paddingBottom: 32 }}>
-			<table className="table is-stripped is-hoverable is-fullwidth">
+		<div
+			className="container"
+			style={{
+				paddingBottom: 32
+			}}>
+			<table
+				style={{ padding: 10 }}
+				className="table is-bordered is-hoverable is-fullwidth">
 				<thead>
 					<tr>
-						{headers.map(header => (
-							<th className="has-text-centered">{header}</th>
+						{headers.map((header, idx) => (
+							<th
+								key={`${idx}${header}`}
+								className="has-text-centered is-size-7">
+								{header}
+							</th>
 						))}
 					</tr>
 				</thead>
@@ -28,12 +38,17 @@ const Table = props => {
 					{data.map((da, idx) => {
 						return (
 							<tr
+								key={idx}
 								data-index={idx}
 								onClick={selectIndex}
 								className={`${selectedIndex == idx &&
 									'has-background-success has-text-light'}`}>
-								{da.map(d => (
-									<td className="has-text-centered">{d}</td>
+								{da.map((d, index) => (
+									<td
+										key={`${d}${index}`}
+										className="has-text-centered is-size-7">
+										{d}
+									</td>
 								))}
 							</tr>
 						)

@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { authorizeUser } from '../../controllers/firebaseController'
 
 const LoginPage = props => {
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
+
+	const authorize = () => authorizeUser(username, password)
+	const setUser = evt => setUsername(evt.currentTarget.value)
+	const setPass = evt => setPassword(evt.currentTarget.value)
+
 	return (
 		<div
 			className="container-fluid is-flex"
@@ -18,12 +26,22 @@ const LoginPage = props => {
 					/>
 				</div>
 				<label className="label">Email</label>
-				<input className="input is-small" style={{ marginBottom: 10 }} />
+				<input
+					className="input is-small"
+					style={{ marginBottom: 10 }}
+					onChange={setUser}
+				/>
 				<div className="block">
 					<label className="label">Password</label>
-					<input className="input is-small" />
+					<input
+						className="input is-small"
+						onChange={setPass}
+						type="password"
+					/>
 				</div>
-				<button className="button is-success is-small">Login</button>
+				<button className="button is-success is-small" onClick={authorize}>
+					Login
+				</button>
 			</div>
 		</div>
 	)
