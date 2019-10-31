@@ -39,7 +39,7 @@ const EmployeeView = props => {
 	} = props
 
 	function fetchEmployee() {
-		readDocument('userprofile', userprofileKey).then(employee => {
+		readDocument('userProfile', userprofileKey).then(employee => {
 			setEmployee(employee)
 		})
 	}
@@ -137,7 +137,7 @@ const EmployeeView = props => {
 	}
 
 	const saveEdits = () => {
-		updateDocument('userprofile', updates, employee.key)
+		updateDocument('userProfile', updates, employee.key)
 		toggleEditMode()
 		fetchEmployees()
 	}

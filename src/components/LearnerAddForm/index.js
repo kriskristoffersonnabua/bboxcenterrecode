@@ -1,38 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react'
-import EmployeeDashboardContext from '../../controllers/contexts/EmployeeDashboardContext'
 import { WEEKDAYS } from '../../utils/dateutils'
 import { convertStringTimeToMilliseconds } from '../../utils/helpers'
 import { withRouter } from 'react-router-dom'
 import { addDocument } from '../../controllers/firebaseController'
 
-const Schedule = props => {
-	const { weekday, timeStart, timeEnd } = props.schedule
-	return (
-		<span
-			onClick={props.deleteSchedule}
-			data-idx={props.index}
-			className="button is-info is-small"
-			style={{ marginRight: 2, marginBottom: 2 }}>
-			{`${WEEKDAYS[weekday]} ${
-				new Date(timeStart).toTimeString().split(' ')[0]
-			}-${new Date(timeEnd).toTimeString().split(' ')[0]}`}
-			<span style={{ marginLeft: 10 }}>
-				<i className="fas fa-trash" />
-			</span>
-		</span>
-	)
-}
-
-const EmployeeView = props => {
-	const [employee, setEmployee] = useState({
+const LearnerAddForm = props => {
+	const [learner, setLearner] = useState({
 		isMale: true,
-		committeeMembership: 'Tutor'
+		learnerType: 'Student'
 	})
 	const [toAddNewSchedule, setNewSchedule] = useState({ weekday: 0 })
-	const { fetchEmployees } = useContext(EmployeeDashboardContext)
+	//TODO: fetch all learners method
 
-	const backToEmployeeDashboard = () => {
-		props.history.push(`/dashboard/employees`, { modal: false })
+	const backToLearnersDashboard = () => {
+		props.history.push(`/dashboard/learners`, { modal: false })
 	}
 
 	const onFieldChange = evt => {
@@ -43,71 +24,22 @@ const EmployeeView = props => {
 			}
 		} = evt
 		if (value.includes('false') || value.includes('true')) {
-			setEmployee(prevState => ({
+			setLearner(prevState => ({
 				...prevState,
 				[field]: !/^(false|0)$/i.test(value) && !!value
 			}))
 		} else if (value.includes('-')) {
-			setEmployee(prevState => ({ ...prevState, [field]: new Date(value) }))
+			setLearner(prevState => ({ ...prevState, [field]: new Date(value) }))
 		} else {
-			setEmployee(prevState => ({ ...prevState, [field]: value }))
+			setLearner(prevState => ({ ...prevState, [field]: value }))
 		}
 	}
 
-	const onTimeChange = evt => {
-		const {
-			currentTarget: {
-				dataset: { field },
-				value
-			}
-		} = evt
-		setNewSchedule(prevState => ({
-			...prevState,
-			[field]: convertStringTimeToMilliseconds(value)
-		}))
-	}
-
-	const onWeekdayChange = evt => {
-		const {
-			currentTarget: { value }
-		} = evt
-		setNewSchedule(prevState => ({
-			...prevState,
-			weekday: Number.parseInt(value)
-		}))
-	}
-
-	const addSchedule = () => {
-		if (!!toAddNewSchedule.timeStart && !!toAddNewSchedule.timeEnd) {
-			let newSchedule = employee.availableSchedule || []
-			newSchedule.push(toAddNewSchedule)
-
-			setEmployee(prevState => ({
-				...prevState,
-				availableSchedule: newSchedule
-			}))
-		}
-	}
-
-	const removeSchedule = evt => {
-		const {
-			currentTarget: {
-				dataset: { idx }
-			}
-		} = evt
-		let newSchedule = employee.availableSchedule
-		newSchedule.splice(idx, 1)
-		setEmployee(prevState => ({
-			...prevState,
-			availableSchedule: newSchedule
-		}))
-	}
-
-	const saveEmployee = () => {
+	const saveLearner = () => {
 		//TODO: form validation
-		addDocument('userProfile', employee, null)
-		fetchEmployees()
-		backToEmployeeDashboard()
+		addDocument('learnerProfile', learner, null)
+		//TODO: fetch all learners
+		backToLearnersDashboard()
 	}
 
 	return (
@@ -132,19 +64,18 @@ const EmployeeView = props => {
 					width: '100%',
 					height: '100%',
 					paddingTop: 20,
-					paddingBottom: 20,
-					overflowY: 'auto'
+					paddingBottom: 20
 				}}>
 				<div className="nav-bar">
 					<div className="nav-bar-left is-flex" style={{ marginBottom: 10 }}>
 						<button
-							onClick={saveEmployee}
+							onClick={saveLearner}
 							className="button level-left is-success is-small"
 							style={{ marginRight: 10 }}>
-							Add Employee
+							Add Learner
 						</button>
 						<button
-							onClick={backToEmployeeDashboard}
+							onClick={backToLearnersDashboard}
 							className="button level-right is-danger is-small">
 							Cancel
 						</button>
@@ -187,6 +118,24 @@ const EmployeeView = props => {
 								onChange={onFieldChange}
 								className="input is-small"
 								placeholder="Citizenship"
+							/>
+							<label style={{ marginTop: 10 }} className="label is-size-7">
+								Mother's Name
+							</label>
+							<input
+								data-field="motherName"
+								onChange={onFieldChange}
+								className="input is-small"
+								placeholder="Place of Birth"
+							/>
+							<label style={{ marginTop: 10 }} className="label is-size-7">
+								Father's Name
+							</label>
+							<input
+								data-field="fatherName"
+								onChange={onFieldChange}
+								className="input is-small"
+								placeholder="Place of Birth"
 							/>
 							<label style={{ marginTop: 10 }} className="label is-size-7">
 								Place of Birth
@@ -258,19 +207,12 @@ const EmployeeView = props => {
 								placeholder="Contact"
 							/>
 							<label style={{ marginTop: 10 }} className="label is-size-7">
-								Committee Membership
+								Learner Type
 							</label>
 							<div className="select is-small">
-								<select
-									data-field="committeeMembership"
-									onChange={onFieldChange}>
-									<option value="Operation">Operation</option>
-									<option value="Client">Client</option>
-									<option value="Tutor">Tutor</option>
-									<option value="Marketing">Marketing</option>
-									<option value="Scholarshipc">Scholarship</option>
-									<option value="Human Resource">Human Resource</option>
-									<option value="Finance">Finance</option>
+								<select data-field="learnerType" onChange={onFieldChange}>
+									<option value="Student">Student</option>
+									<option value="Reviewer">Reviewer</option>
 								</select>
 							</div>
 						</div>
@@ -296,87 +238,36 @@ const EmployeeView = props => {
 								className="input is-small"
 								placeholder="Secondary Education"
 							/>
+							<label style={{ marginTop: 10 }} className="label is-size-7">
+								Tertiary Education
+							</label>
+							<input
+								data-field="tertiaryEducation"
+								onChange={onFieldChange}
+								className="input is-small"
+								placeholder="Tertiary Education"
+							/>
 						</div>
 						<div className="box">
-							<label className="label is-size-6">Emergency Contact</label>
+							<label className="label is-size-6">Guardian</label>
 							<label style={{ marginTop: 10 }} className="label is-size-7">
 								Name
 							</label>
 							<input
-								data-field="emergencyPerson"
+								data-field="guardianName"
 								onChange={onFieldChange}
 								className="input is-small"
-								placeholder="Contact Person"
+								placeholder="Name"
 							/>
 							<label style={{ marginTop: 10 }} className="label is-size-7">
 								Contact
 							</label>
 							<input
-								data-field="emergencyContactPerson"
+								data-field="guardianContact"
 								onChange={onFieldChange}
 								className="input is-small"
-								placeholder="Contact Number"
+								placeholder="Contact"
 							/>
-						</div>
-					</div>
-					<div className="column is-one-quarter">
-						<div className="box">
-							<label className="label is-size-6">Available Schedule</label>
-							<div className="container">
-								<label style={{ marginTop: 10 }} className="label is-size-7">
-									Weekday
-								</label>
-								<div className="select is-small">
-									<select data-field="weekday" onChange={onWeekdayChange}>
-										<option value={0}>Sunday</option>
-										<option value={1}>Monday</option>
-										<option value={2}>Tuesday</option>
-										<option value={3}>Wednesday</option>
-										<option value={4}>Thursday</option>
-										<option value={5}>Friday</option>
-										<option value={6}>Saturday</option>
-									</select>
-								</div>
-								<label style={{ marginTop: 10 }} className="label is-size-7">
-									Time Start
-								</label>
-								<input
-									data-field="timeStart"
-									onChange={onTimeChange}
-									className="input is-small"
-									type="time"
-								/>
-								<label style={{ marginTop: 10 }} className="label is-size-7">
-									Time End
-								</label>
-								<input
-									data-field="timeEnd"
-									onChange={onTimeChange}
-									className="input is-small"
-									type="time"
-								/>
-								<div className="container is-flex" style={{ marginBottom: 10 }}>
-									<button
-										style={{ marginTop: 10 }}
-										onClick={addSchedule}
-										className="button is-success is-small">
-										Add
-									</button>
-								</div>
-							</div>
-							<div className="container" style={{ overflowY: 'scroll' }}>
-								{!!employee.availableSchedule &&
-									typeof employee.availableSchedule === 'object' &&
-									employee.availableSchedule.map((sched, idx) => {
-										return (
-											<Schedule
-												index={idx}
-												schedule={sched}
-												deleteSchedule={removeSchedule}
-											/>
-										)
-									})}
-							</div>
 						</div>
 					</div>
 				</div>
@@ -385,4 +276,4 @@ const EmployeeView = props => {
 	)
 }
 
-export default withRouter(EmployeeView)
+export default withRouter(LearnerAddForm)

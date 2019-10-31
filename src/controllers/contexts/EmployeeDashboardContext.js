@@ -7,7 +7,7 @@ function Provider(props) {
 	const [employees, setEmployees] = useState([])
 
 	const fetchEmployees = () => {
-		getCollection('userprofile').then(data => {
+		getCollection('userProfile').then(data => {
 			setEmployees(prevState => data)
 		})
 	}

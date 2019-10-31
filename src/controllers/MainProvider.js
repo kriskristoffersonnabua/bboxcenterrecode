@@ -1,11 +1,14 @@
 import React from 'react'
 import { ApplicationProvider } from './contexts/ApplicationContext'
 import { EmployeeDashboardProvider } from './contexts/EmployeeDashboardContext'
+import { LearnersDashboardProvider } from './contexts/LearnersDashboardContext'
 
 function MainProvider(props) {
 	return (
 		<ApplicationProvider>
-			<EmployeeDashboardProvider>{props.children}</EmployeeDashboardProvider>
+			<LearnersDashboardProvider>
+				<EmployeeDashboardProvider>{props.children}</EmployeeDashboardProvider>
+			</LearnersDashboardProvider>
 		</ApplicationProvider>
 	)
 }

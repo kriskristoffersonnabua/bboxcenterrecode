@@ -46,13 +46,13 @@ const Header = props => {
 				</a>
 				<a
 					onClick={redirecTo}
-					data-link="reviewers"
+					data-link="learners"
 					className={`has-text-weight-bold navbar-item is-size-7 ${
-						props.location.pathname.includes('reviewers')
+						props.location.pathname.includes('learners')
 							? 'has-text-success'
 							: ''
 					}`}>
-					Reviewers
+					Learners
 				</a>
 				<a
 					onClick={redirecTo}
